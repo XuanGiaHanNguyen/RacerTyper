@@ -1,13 +1,16 @@
 import React from "react";
 import "./index.css";
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom"; 
+import Landing from "./pages/landing";
+import {BrowserRouter as Router, Routes, Route, BrowserRouter} from "react-router-dom"; 
 
 function App() {
 
   return (
-    <>
-        Click on the Vite and React logos to learn more
-    </>
+   <Router>
+    <Routes>
+      <Route path="/" element={<Landing/>}/>
+    </Routes>
+   </Router>
   )
 }
 
