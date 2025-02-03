@@ -1,9 +1,8 @@
-import { useState } from 'react'
-
-import "./index.css"
+import React from "react";
+import "./index.css";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom"; 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
