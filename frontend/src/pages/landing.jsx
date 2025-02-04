@@ -40,12 +40,15 @@ const Landing = () => {
             <h1 className='font-black text-8xl mt-24 text-gray-600'>
               Typer Racer
             </h1>
-            <button className='mt-8 px-32 py-2 text-2xl font-black text-white' style={{backgroundColor: "#f5c6ac"}}>
-              Start Now
-            </button>
+            <button
+                className="mt-8 px-32 py-2 text-2xl font-black text-white rounded-xl transition-transform duration-300 ease-in-out hover:scale-[1.05]"
+                style={{ backgroundColor: "#f5c6ac" }}
+                >
+                Start Now
+                </button>
             <div className='relative flex w-full mt-30 pb-48'>
-                <img src={Car1} alt="Car1" className='absolute bottom-16 w-48' style={{ left: `${carPosition}px`, zIndex: 2 }} />
-                <img src={Bus} alt="Bus" className='absolute bottom-26 w-56' style={{ left: `${busPosition}px`, zIndex: 1 }} />
+                <img src={Car1} alt="Car1" className='absolute bottom-14 w-48' style={{ left: `${carPosition}px`, zIndex: 2 }} />
+                <img src={Bus} alt="Bus" className='absolute bottom-24 w-56' style={{ left: `${busPosition}px`, zIndex: 1 }} />
                 <img src={Tree} alt="Tree" className='w-60 absolute bottom-0 left-0' style={{ zIndex: 3 }} />
             </div>
         </div>
