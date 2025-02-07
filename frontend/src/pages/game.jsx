@@ -12,11 +12,11 @@ const Game = () => {
 
     useEffect(() => {
         const moveCar = setInterval(() => {
-            setCarPosition(prev => (prev < -200 ? window.innerWidth : prev - 5));
+            setCarPosition(prev => (prev < -200 ? window.innerWidth : prev - 10));
         }, 50);
 
         const moveBus = setInterval(() => {
-            setBusPosition(prev => (prev > window.innerWidth ? -300 : prev + 4));
+            setBusPosition(prev => (prev > window.innerWidth ? -300 : prev + 8));
         }, 50);
 
         return () => {
@@ -46,7 +46,7 @@ const Game = () => {
                 >
                 Start Now
                 </button>
-            <div className='relative flex w-full mt-30 pb-48'>
+            <div className='relative flex w-full mt-36 pb-48'>
                 <img src={Car1} alt="Car1" className='absolute bottom-14 w-48' style={{ left: `${carPosition}px`, zIndex: 2 }} />
                 <img src={Bus} alt="Bus" className='absolute bottom-24 w-56' style={{ left: `${busPosition}px`, zIndex: 1 }} />
                 <img src={Tree} alt="Tree" className='w-60 absolute bottom-0 left-0' style={{ zIndex: 3 }} />
