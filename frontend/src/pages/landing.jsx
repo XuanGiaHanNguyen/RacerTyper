@@ -4,11 +4,13 @@ import landingpg from '../assets/main/landing.png';
 
 import Car1 from '../assets/main/Car1.png'; 
 import Bus from '../assets/main/Bus.png'; 
-import Tree from '../assets/main/Tree.png';
+import Car from '../assets/main/car.png'; 
+
 
 const Landing = () => {
     const [carPosition, setCarPosition] = useState(window.innerWidth);
     const [busPosition, setBusPosition] = useState(-300);
+    const [Car2Position, setCar2Position] = useState(-500);
 
     useEffect(() => {
         const moveCar = setInterval(() => {
@@ -19,9 +21,14 @@ const Landing = () => {
             setBusPosition(prev => (prev > window.innerWidth ? -300 : prev + 4));
         }, 50);
 
+        const moveCar2 = setInterval(() => {
+            setCar2Position(prev => (prev > window.innerWidth ? -300 : prev + 6));
+        }, 50);
+
         return () => {
             clearInterval(moveCar);
             clearInterval(moveBus);
+            clearInterval(moveCar2);
         };
     }, []);
 
@@ -37,7 +44,7 @@ const Landing = () => {
                 width: "100vw",  
             }}
         >
-            <h1 className='font-black text-8xl mt-24 text-gray-600'>
+            <h1 className='font-black text-8xl mt-32 text-gray-600'>
               Typer Racer
             </h1>
             <button
@@ -46,10 +53,13 @@ const Landing = () => {
                 >
                 Start Now
                 </button>
-            <div className='relative flex w-full mt-30 pb-48'>
-                <img src={Car1} alt="Car1" className='absolute bottom-14 w-48' style={{ left: `${carPosition}px`, zIndex: 2 }} />
-                <img src={Bus} alt="Bus" className='absolute bottom-24 w-56' style={{ left: `${busPosition}px`, zIndex: 1 }} />
-                <img src={Tree} alt="Tree" className='w-60 absolute bottom-0 left-0' style={{ zIndex: 3 }} />
+            <div className='relative flex w-full mt-20 pb-48'>
+                <img src={Car1} alt="Car1" className='absolute bottom-0 w-40' style={{ left: `${carPosition}px`, zIndex: 2 }} />
+                <img src={Bus} alt="Bus" className='absolute bottom-0 w-48' style={{ left: `${busPosition}px`, zIndex: 1 }} />
+                <img src={Car} alt="Car2" className='absolute bottom-0 w-40' style={{ left: `${Car2Position}px`, zIndex: 1 }} />
+            </div>
+            <div className=' w-full h-48' style={{ backgroundColor: "#c3c9bf" }}>
+
             </div>
         </div>
     );
