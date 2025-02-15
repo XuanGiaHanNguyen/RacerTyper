@@ -6,14 +6,17 @@ const Landing = () => {
     return(
         <div className='w-full h-screen flex flex-row'>
             <div className='flex-1 flex items-center justify-center flex-col'  style={{backgroundColor: '#567C8D'}}>
-                <h1>
+                <h1 className='font-black text-6xl pb-4' style={{color: '#e0dcda'}}>
                     Typer Car 
                 </h1>
-                <p>
-                    Speed isn’t just for the track—burn rubber on the keyboard and leave typos in the dust! 
-                </p>
                 <button>
                     Start Now 
+                </button>
+                <button>
+                    Rules
+                </button>
+                <button>
+                    Credits
                 </button>
             </div>
             <div className='bg-white flex-1 flex flex-col'>
