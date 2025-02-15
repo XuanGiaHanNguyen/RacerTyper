@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import bus from '../assets/main/bus.png';
 import car1 from '../assets/main/car1.png';
 import car2 from '../assets/main/car2.png';
+import bg from '../assets/main/bg.png';
 
 const Landing = () => {
     return (
@@ -59,7 +60,13 @@ const Landing = () => {
             </div>
 
             <div className='bg-white flex-1 flex flex-col'>
-                <div className='flex-3 overflow-hidden' style={{backgroundColor: '#C8D9E6'}}>
+                <div className='flex-3 overflow-hidden' 
+                style={{ 
+                    backgroundImage: `url(${bg})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }}>
                     <div className='h-full relative'>
                         <img 
                             src={car2} 
