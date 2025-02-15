@@ -1,15 +1,24 @@
 import React from "react";
 import "./index.css";
+import { Links } from 'react-router-dom';
+import {BrowserRouter as Router, Routes, Route, BrowserRouter} from "react-router-dom"; 
+
 import Landing from "./pages/landing";
 import Game from "./pages/game";
-import {BrowserRouter as Router, Routes, Route, BrowserRouter} from "react-router-dom"; 
+import Instruction  from './pages/pop-ups/instruction';
+import Cred from './pages/pop-ups/credits';
+
+// name of the function must be capitalized
 
 function App() {
 
   return (
    <Router>
     <Routes>
-      <Route path="/" element={<Landing/>}/>
+      <Route path="/" element={<Landing/>}>
+        <Route path="/instruction" element={<Instruction/>}/>
+        <Route path="/credits" element={<Cred/>}/>
+      </Route>
       <Route path="/game" element={<Game/>}/>
     </Routes>
    </Router>
