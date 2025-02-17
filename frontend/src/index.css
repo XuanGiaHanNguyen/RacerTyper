@@ -38,3 +38,11 @@ body {
   min-height: 100vh;
 }
  */
+ 
+span.correct{
+  color: green
+}
+
+span.wrong{
+  color: red
+}

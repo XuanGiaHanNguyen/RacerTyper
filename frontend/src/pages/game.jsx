@@ -21,6 +21,7 @@ const Game = () => {
 
     const inputRef = useRef(null);
     const charRef = useRef([]);
+    const [correctWrong, setCorrectWrong] = useState([])
 
     const handleChange = (e) => {
 
@@ -42,9 +43,11 @@ const Game = () => {
             // check whether what we typed in is correct or not
             if(typedChar === currentChar.textContent){
                 setCharIndex(charIndex + 1);
+                correctWrong[charIndex] = ' correct ';
             } else{
                 setCharIndex(charIndex + 1);
                 setMistake(mistake+1);
+                correctWrong[charIndex] = ' wrong ';
             }
 
             // check if finished
@@ -70,7 +73,8 @@ const Game = () => {
     });
 
     useEffect(() => {
-        inputRef.current.focus()
+        inputRef.current.focus();
+        setCorrectWrong(Array(charRef.current.length).fill(''))
     }, []
     );
 
@@ -94,10 +98,49 @@ const Game = () => {
         return () => clearInterval(animationFrame);
     }, [windowWidth]);
 
+    useEffect(() =>{
+
+        let interval;
+        if(isTyping && timeLeft>0){
+            interval = setInterval(()=> {
+                setTimeLeft(timeLeft-1);
+
+                let correctChars = charIndex - mistake;
+                let totalTime = maxTime - timeLeft;
+    
+                let CPM = correctChars*(60/ totalTime);
+                CPM = CPM <0 || !CPM || CPM === Infinity? 0: CPM; 
+                setCPM(parseInt(CPM, 10))
+    
+                let wpm = Math.round((correctChars / 5 / totalTime)*60);
+                wpm = wpm <0 || !wpm || wpm === Infinity? 0: wpm;
+                setWPM(parseInt(wpm, 10))
+            }, 1000);
+        } else if (timeLeft === 0){
+            clearInterval(interval);
+            setIsTyping(false);
+        }
+        return () => {
+            clearInterval(interval); 
+        }
+       
+    }, [isTyping, timeLeft, charIndex, mistake])
+
     const getTransitionStyle = (position) => ({
         transform: `translateX(${position}px)`,
         transition: position < 0 || position >= windowWidth ? 'none' : 'transform 16ms linear'
     });
+
+    const ResetGame = () => {
+        setIsTyping(false);
+        setTimeLeft(60);
+        setCharIndex(0);
+        setMistake(0);
+        setCPM(0);
+        setWPM(0);
+        setCorrectWrong(Array(charRef.current.length).fill(''));
+        inputRef.current.focus(); 
+    }
 
     return (
         <div className="flex flex-col h-screen">
@@ -167,7 +210,7 @@ const Game = () => {
                                     <p className='pl-5 py-3'>Mistake: <strong className='text-2xl pl-1'>{mistake}</strong></p>
                                     <p className='pl-5 py-3'>WPM: <strong className='text-2xl pl-1'>{WPM}</strong></p>
                                     <p className='pl-5 py-3'>CPM: <strong className='text-2xl pl-1'>{CPM}</strong></p>
-                                    <button className='py-3 mx-5 rounded-xl' style={{ color: '#f0ebe9', backgroundColor: '#567C8D' }}
+                                    <button className='py-3 mx-5 rounded-xl' onClick={ResetGame} style={{ color: '#f0ebe9', backgroundColor: '#567C8D' }}
 
                                         onMouseEnter={(e) => {
                                             e.target.style.color = '#d6d6d6';
@@ -187,7 +230,10 @@ const Game = () => {
 
                             {
                                 medium.split('').map((char,index)=> (
-                                    <span className='text-2xl text-gray-500 font-semibold leading-loose' ref={(e)=> {
+                                    <span className={`text-2xl text-gray-500 font-semibold leading-loose ${index === charIndex? 'underline underline-offset-5 decoration-4 decoration-gray-500': ''} 
+                                     ${correctWrong[index] === ' correct ' ? 'text-green-700' : ''}
+                                        ${correctWrong[index] === ' wrong ' ? 'text-red-700 bg-red-100' : ''}
+                                    `} ref={(e)=> {
                                         charRef.current[index] = e
                                     }}>
                                         {char}
