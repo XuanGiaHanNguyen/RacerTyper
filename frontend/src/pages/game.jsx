@@ -85,7 +85,16 @@ const Game = () => {
                 </div>
                 <div className="flex-12" style={{backgroundColor: '#c9d4c1'}}>
                     <div className='h-full'>
-                        <div className='h-full mt-10 mx-10 rounded-2xl' style={{backgroundColor: '#f0ebe9' }}>
+                        <div className='h-full mt-10 mx-10 rounded-2xl px-10 pt-8' style={{backgroundColor: '#f0ebe9' }}>
+                            
+                            {
+                                easy.split('').map((char,index)=> (
+                                    <span className='text-3xl  font-bold'>
+                                        {char}
+                                    </span>
+                                ))
+                            }
+
 
                         </div>
                     </div>
