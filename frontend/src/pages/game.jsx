@@ -1,5 +1,5 @@
 import '../index.css';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import car1 from '../assets/main/car1.png';
 import truck from '../assets/main/foodtruck.png'
@@ -8,6 +8,17 @@ import bus from '../assets/main/bus.png';
 
 
 const Game = () => {
+
+    const maxTime = 60; 
+    const [timeLeft, setTimeLeft] = useState(60);
+    const [mistake, setMistake] = useState(0);
+    const [WPM, setWPM] = useState(0);
+    const [CPM, setCPM] = useState(0); 
+
+    const [charIndex, setCharIndex] = useState(0);
+    const [isTyping, setIsTyping] = useState(false); 
+
+    const inputRef = useRef();
 
     const easy = "The sun is shining brightly, and the sky is a clear shade of blue. Birds fly high above, chirping as they glide through the air. Children laugh and play in the park, running across the soft green grass. A gentle breeze rustles the leaves, making the trees sway back and forth. It is a perfect day to relax, take a deep breath, and enjoy the beauty of nature all around."; 
     const medium = "Technology has transformed the way we communicate, work, and interact with the world. With just a few clicks, we can send messages across continents, connect with loved ones, or access a wealth of information. Businesses rely on digital tools to improve efficiency and streamline operations. As innovation continues to shape our daily lives, adapting to new advancements has become essential. The rapid growth of technology challenges us to learn and evolve constantly.";
@@ -20,6 +31,11 @@ const Game = () => {
         truck: -800,
         bus: -1200,
     });
+
+    useEffect(() => {
+        inputRef.current.focus()
+    }, []
+    );
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
@@ -108,10 +124,10 @@ const Game = () => {
                         <div className=' mt-10 pb-8 mx-10 rounded-2xl px-10 pt-5' style={{backgroundColor: '#f0ebe9' }}>
                             <div id='result'>
                                 <div className='grid grid-cols-5 font-bold text-xl text-gray-600 pb-3' style={{color: '#567C8D'}}>
-                                    <p className='pl-5 py-3'>Time Left: </p>
-                                    <p className='pl-5 py-3'>Mistake: </p>
-                                    <p className='pl-5 py-3'>WPM: </p>
-                                    <p className='pl-5 py-3'>CPM: </p>
+                                    <p className='pl-5 py-3'>Time Left: <strong className='text-2xl pl-1'>{timeLeft}</strong> </p>
+                                    <p className='pl-5 py-3'>Mistake: <strong className='text-2xl pl-1'>{mistake}</strong></p>
+                                    <p className='pl-5 py-3'>WPM: <strong className='text-2xl pl-1'>{WPM}</strong></p>
+                                    <p className='pl-5 py-3'>CPM: <strong className='text-2xl pl-1'>{CPM}</strong></p>
                                     <button className='py-3 mx-5 rounded-xl' style={{ color: '#f0ebe9', backgroundColor: '#567C8D' }}
 
                                         onMouseEnter={(e) => {
@@ -128,6 +144,8 @@ const Game = () => {
                             </div>
                             <hr className='border-2 border-gray-400' />
                             <div id='test' className='py-5 px-6'>
+                            <input type="text" className="opacity-0 absolute -z-99" ref={inputRef} />
+
                             {
                                 medium.split('').map((char,index)=> (
                                     <span className='text-2xl text-gray-500 font-semibold leading-loose'>
