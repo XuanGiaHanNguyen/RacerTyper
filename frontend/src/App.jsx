@@ -12,15 +12,15 @@ import Motivation from './pages/pop-ups/motivation';
 function App() {
 
   return (
-   <Router>
-    <Routes>
-      <Route path="/" element={<Landing/>}>
-        <Route path="/instruction" element={<Instruction/>}/>
-        <Route path="/motivation" element={<Motivation/>}/>
-      </Route>
-      <Route path="/game" element={<Game/>}/>
-    </Routes>
-   </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing/>}>
+          <Route path="/instruction" element={<Instruction/>}/>
+          <Route path="/motivation" element={<Motivation/>}/>
+        </Route>
+        <Route path="/game" element={<Game/>}/>
+      </Routes>
+   </BrowserRouter>
   )
 }
 
