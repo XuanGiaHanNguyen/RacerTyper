@@ -1,5 +1,6 @@
 import '../index.css';
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from 'react-router-dom';
 
 import car1 from '../assets/main/car1.png';
 import truck from '../assets/main/foodtruck.png'
@@ -18,7 +19,43 @@ const Game = () => {
     const [charIndex, setCharIndex] = useState(0);
     const [isTyping, setIsTyping] = useState(false); 
 
-    const inputRef = useRef();
+    const inputRef = useRef(null);
+    const charRef = useRef([]);
+
+    const handleChange = (e) => {
+
+        // getting character of the paragraph 
+        const characters =  charRef.current;
+        let currentChar = charRef.current[charIndex];
+
+        // getting character in the input field
+        let typedChar = e.target.value.slice(-1); 
+
+        // if statements
+        if(charIndex < characters.length && timeLeft > 0 ){
+
+            // verify if user is typing
+            if(!isTyping){
+                setIsTyping(true)
+            }
+
+            // check whether what we typed in is correct or not
+            if(typedChar === currentChar.textContent){
+                setCharIndex(charIndex + 1);
+            } else{
+                setCharIndex(charIndex + 1);
+                setMistake(mistake+1);
+            }
+
+            // check if finished
+            if(charIndex === characters.length -1){
+                setIsTyping(false)
+            }
+        } else{
+            setIsTyping(false)
+        }
+
+    }
 
     const easy = "The sun is shining brightly, and the sky is a clear shade of blue. Birds fly high above, chirping as they glide through the air. Children laugh and play in the park, running across the soft green grass. A gentle breeze rustles the leaves, making the trees sway back and forth. It is a perfect day to relax, take a deep breath, and enjoy the beauty of nature all around."; 
     const medium = "Technology has transformed the way we communicate, work, and interact with the world. With just a few clicks, we can send messages across continents, connect with loved ones, or access a wealth of information. Businesses rely on digital tools to improve efficiency and streamline operations. As innovation continues to shape our daily lives, adapting to new advancements has become essential. The rapid growth of technology challenges us to learn and evolve constantly.";
@@ -65,10 +102,12 @@ const Game = () => {
     return (
         <div className="flex flex-col h-screen">
             <div className='w-full' style={{backgroundColor: '#C8D9E6'}}>
-                <div className=' pb-2 mx-32 grid grid-cols-5 font-bold rounded-b-2xl bg-white' style={{ color: '#2F4156'}}>
+                <div className=' pb-2 mx-32 grid grid-cols-5 font-bold rounded-b-2xl bg-gray-50' style={{ color: '#2F4156'}}>
                     <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Easy</button>
                     <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Medium</button>
-                    <button className='py-2 font-black text-xl rounded-b-2xl' style={{backgroundColor: '#567C8D', color: '#f0ebe9'}}
+                    <Link
+                    to='/'
+                    className='py-2 text-center font-black text-xl rounded-b-2xl' style={{backgroundColor: '#567C8D', color: '#f0ebe9'}}
 
                         onMouseEnter={(e) => {
                             e.target.style.color = '#2F4156';
@@ -79,7 +118,7 @@ const Game = () => {
                             e.target.style.backgroundColor = '#567C8D';
                         }}
 
-                    >Typer Racer</button>
+                    >Typer Racer</Link>
                     <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Hard</button>
                     <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Master</button>
                 </div>
@@ -144,11 +183,13 @@ const Game = () => {
                             </div>
                             <hr className='border-2 border-gray-400' />
                             <div id='test' className='py-5 px-6'>
-                            <input type="text" className="opacity-0 absolute -z-99" ref={inputRef} />
+                            <input type="text" className="opacity-0 absolute -z-99" onChange={handleChange} ref={inputRef} />
 
                             {
                                 medium.split('').map((char,index)=> (
-                                    <span className='text-2xl text-gray-500 font-semibold leading-loose'>
+                                    <span className='text-2xl text-gray-500 font-semibold leading-loose' ref={(e)=> {
+                                        charRef.current[index] = e
+                                    }}>
                                         {char}
                                     </span>
                                 ))
