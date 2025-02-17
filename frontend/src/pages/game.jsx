@@ -1,6 +1,7 @@
 import '../index.css';
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from 'react-router-dom';
+import ResultsPopup from './pop-ups/ResultsPopup';
 
 import car1 from '../assets/main/car1.png';
 import truck from '../assets/main/foodtruck.png'
@@ -10,6 +11,7 @@ import bus from '../assets/main/bus.png';
 
 const Game = () => {
 
+    const [showResults, setShowResults] = useState(false);
     const maxTime = 60; 
     const [timeLeft, setTimeLeft] = useState(60);
     const [mistake, setMistake] = useState(0);
@@ -26,40 +28,39 @@ const Game = () => {
     const [correctWrong, setCorrectWrong] = useState([])
 
     const handleChange = (e) => {
-
-        // getting character of the paragraph 
-        const characters =  charRef.current;
-        let currentChar = charRef.current[charIndex];
-
-        // getting character in the input field
-        let typedChar = e.target.value.slice(-1); 
-
-        // if statements
-        if(charIndex < characters.length && timeLeft > 0 ){
-
-            // verify if user is typing
-            if(!isTyping){
-                setIsTyping(true)
-            }
-
-            // check whether what we typed in is correct or not
-            if(typedChar === currentChar.textContent){
-                setCharIndex(charIndex + 1);
-                correctWrong[charIndex] = ' correct ';
-            } else{
-                setCharIndex(charIndex + 1);
-                setMistake(mistake+1);
-                correctWrong[charIndex] = ' wrong ';
-            }
-
-            // check if finished
-            if(charIndex === characters.length -1){
-                setIsTyping(false)
-            }
-        } else{
-            setIsTyping(false)
+        if (showResults) return;
+    
+        const typedChar = e.target.value.slice(-1);
+        e.target.value = '';
+    
+        const characters = charRef.current;
+        if (!characters || charIndex >= characters.length || timeLeft <= 0) {
+            return;
         }
-
+    
+        let currentChar = characters[charIndex];
+        if (!currentChar) return;
+    
+        // Only set isTyping to true on the first character
+        if (!isTyping && timeLeft === maxTime) {
+            setIsTyping(true);
+        }
+    
+        // check whether what we typed in is correct or not
+        if (typedChar === currentChar.textContent) {
+            setCharIndex(prev => prev + 1);
+            correctWrong[charIndex] = ' correct ';
+        } else {
+            setCharIndex(prev => prev + 1);
+            setMistake(prev => prev + 1);
+            correctWrong[charIndex] = ' wrong ';
+        }
+    
+        // check if finished
+        if (charIndex === characters.length - 1) {
+            setIsTyping(false);
+            setShowResults(true);
+        }
     }
 
     const paragraphs = {
@@ -108,38 +109,32 @@ const Game = () => {
         return () => clearInterval(animationFrame);
     }, [windowWidth]);
 
-    useEffect(() =>{
-
+    useEffect(() => {
         let interval;
-        if(isTyping && timeLeft>0){
-            interval = setInterval(()=> {
-                setTimeLeft(timeLeft-1);
-
+        // Start timer when typing begins and keep it running
+        if (isTyping && timeLeft > 0) {
+            interval = setInterval(() => {
+                setTimeLeft(prev => prev - 1);
+                
                 let correctChars = charIndex - mistake;
                 let totalTime = maxTime - timeLeft;
     
-                let CPM = correctChars*(60/ totalTime);
-                CPM = CPM <0 || !CPM || CPM === Infinity? 0: CPM; 
-                setCPM(parseInt(CPM, 10))
+                let CPM = correctChars * (60 / totalTime);
+                CPM = CPM < 0 || !CPM || CPM === Infinity ? 0 : CPM;
+                setCPM(parseInt(CPM, 10));
     
-                let wpm = Math.round((correctChars / 5 / totalTime)*60);
-                wpm = wpm <0 || !wpm || wpm === Infinity? 0: wpm;
-                setWPM(parseInt(wpm, 10))
+                let wpm = Math.round((correctChars / 5 / totalTime) * 60);
+                wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
+                setWPM(parseInt(wpm, 10));
             }, 1000);
-        } else if (timeLeft === 0){
+        } else if (timeLeft === 0) {
             clearInterval(interval);
             setIsTyping(false);
+            setShowResults(true);
         }
-        return () => {
-            clearInterval(interval); 
-        }
-       
-    }, [isTyping, timeLeft, charIndex, mistake])
-
-    const getTransitionStyle = (position) => ({
-        transform: `translateX(${position}px)`,
-        transition: position < 0 || position >= windowWidth ? 'none' : 'transform 16ms linear'
-    });
+    
+        return () => clearInterval(interval);
+    }, [isTyping, timeLeft]); // Remove charIndex and mistake from dependencies
 
     const ResetGame = () => {
         setIsTyping(false);
@@ -148,9 +143,20 @@ const Game = () => {
         setMistake(0);
         setCPM(0);
         setWPM(0);
+        setShowResults(false);
         setCorrectWrong(Array(charRef.current.length).fill(''));
-        inputRef.current.focus(); 
+        if (inputRef.current) {
+            inputRef.current.value = ''; // Clear the input
+            inputRef.current.focus();
+        }
     }
+
+    const getTransitionStyle = (position) => {
+        return {
+          transform: `translateX(${position}px)`,
+          transition: 'transform 0.016s linear'
+        };
+      };
 
     return (
         <div className="flex flex-col h-screen">
@@ -224,7 +230,7 @@ const Game = () => {
                 </div>
                 <div className="flex-12" style={{backgroundColor: '#c9d4c1'}}>
                     <div className=''>
-                        <div className=' mt-10 pb-8 mx-10 rounded-2xl px-10 pt-5' style={{backgroundColor: '#f0ebe9' }}>
+                        <div className=' mt-10 pb-8 mx-10 rounded-t-2xl px-10 pt-5' style={{backgroundColor: '#f0ebe9' }}>
                             <div id='result'>
                                 <div className='grid grid-cols-5 font-bold text-xl text-gray-600 pb-3' style={{color: '#567C8D'}}>
                                     <p className='pl-5 py-3'>Time Left: <strong className='text-2xl pl-1'>{timeLeft}</strong> </p>
@@ -274,6 +280,13 @@ const Game = () => {
                     </div>
                 </div>
             </div>
+            <ResultsPopup 
+                mistake={mistake}
+                WPM={WPM}
+                CPM={CPM}
+                onTryAgain={ResetGame}
+                isVisible={showResults}
+            />
         </div>
     );
 };

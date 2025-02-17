@@ -55,7 +55,7 @@ const Landing = () => {
                         Instruction
                     </Link>
 
-                    <Link to='/credits'
+                    <Link to='/motivation'
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center  transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
                         onMouseEnter={(e) => {
@@ -67,7 +67,7 @@ const Landing = () => {
                             e.target.style.backgroundColor = '#F5EFEB';
                         }}
                     >
-                        Credits
+                        Motivations
                     </Link>
                 </div>
             </div>
