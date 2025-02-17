@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.css";
-import {BrowserRouter as Router, Routes, Route, BrowserRouter} from "react-router-dom"; 
+import { Routes, Route, BrowserRouter} from "react-router-dom"; 
 
 import Landing from "./pages/landing";
 import Game from "./pages/game";
