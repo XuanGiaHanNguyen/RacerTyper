@@ -9,7 +9,7 @@ const Instruction = () => {
 
     return (
         <div className="fixed inset-0 bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="rounded-xl shadow-lg relative w-[90%] h-[80vh] overflow-auto" style={{backgroundColor: '#F5EFEB' }}>
+            <div className="rounded-xl shadow-lg relative w-[85%] h-[80vh] overflow-auto" style={{backgroundColor: '#F5EFEB' }}>
                 <button
                     onClick={() => navigate('/')}
                     className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 text-xl transition-colors"
