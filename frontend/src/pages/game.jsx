@@ -19,6 +19,8 @@ const Game = () => {
     const [charIndex, setCharIndex] = useState(0);
     const [isTyping, setIsTyping] = useState(false); 
 
+    const [currentParagraph, setCurrentParagraph] = useState('medium'); 
+
     const inputRef = useRef(null);
     const charRef = useRef([]);
     const [correctWrong, setCorrectWrong] = useState([])
@@ -60,9 +62,17 @@ const Game = () => {
 
     }
 
-    const easy = "The sun is shining brightly, and the sky is a clear shade of blue. Birds fly high above, chirping as they glide through the air. Children laugh and play in the park, running across the soft green grass. A gentle breeze rustles the leaves, making the trees sway back and forth. It is a perfect day to relax, take a deep breath, and enjoy the beauty of nature all around."; 
-    const medium = "Technology has transformed the way we communicate, work, and interact with the world. With just a few clicks, we can send messages across continents, connect with loved ones, or access a wealth of information. Businesses rely on digital tools to improve efficiency and streamline operations. As innovation continues to shape our daily lives, adapting to new advancements has become essential. The rapid growth of technology challenges us to learn and evolve constantly.";
-    const hard = "In an era driven by rapid technological advancements, adaptability has become more crucial than ever. Artificial intelligence, automation, and data science are revolutionizing industries, altering the way we work and solve problems. As machines take over repetitive tasks, human creativity and critical thinking grow in importance. Continuous learning is the key to staying relevant in a fast-paced world. Embracing change not only fosters resilience but also opens the door to new opportunities and groundbreaking innovations.";
+    const paragraphs = {
+        easy: "The sun is shining brightly, and the sky is a clear shade of blue. Birds fly high above, chirping as they glide through the air. Children laugh and play in the park, running across the soft green grass. A gentle breeze rustles the leaves, making the trees sway back and forth. It is a perfect day to relax, take a deep breath, and enjoy the beauty of nature all around.",
+        medium: "Technology has transformed the way we communicate, work, and interact with the world. With just a few clicks, we can send messages across continents, connect with loved ones, or access a wealth of information. Businesses rely on digital tools to improve efficiency and streamline operations. As innovation continues to shape our daily lives, adapting to new advancements has become essential. The rapid growth of technology challenges us to learn and evolve constantly.",
+        master: "In an era driven by rapid technological advancements, adaptability has become more crucial than ever. Artificial intelligence, automation, and data science are revolutionizing industries, altering the way we work and solve problems. As machines take over repetitive tasks, human creativity and critical thinking grow in importance. Continuous learning is the key to staying relevant in a fast-paced world. Embracing change not only fosters resilience but also opens the door to new opportunities and groundbreaking innovations.",
+        hard: "Mastery demands precision and speed in a world of constant innovation. Quantum computing, neural networks, and cybersecurity redefine technology's limits. As AI transforms industries, ethical dilemmas arise, requiring responsible solutions. Adaptability and critical thinking are essential to navigate this evolving landscape. Those who embrace complexity with determination will shape the future."
+    }
+
+    const handleDifficultyChange = (difficulty) => {
+        setCurrentParagraph(difficulty);
+        ResetGame();
+    }
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [positions, setPositions] = useState({
@@ -75,7 +85,7 @@ const Game = () => {
     useEffect(() => {
         inputRef.current.focus();
         setCorrectWrong(Array(charRef.current.length).fill(''))
-    }, []
+    }, [currentParagraph]
     );
 
     useEffect(() => {
@@ -145,13 +155,19 @@ const Game = () => {
     return (
         <div className="flex flex-col h-screen">
             <div className='w-full' style={{backgroundColor: '#C8D9E6'}}>
-                <div className=' pb-2 mx-32 grid grid-cols-5 font-bold rounded-b-2xl bg-gray-50' style={{ color: '#2F4156'}}>
-                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Easy</button>
-                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Medium</button>
+                <div className=' pb-2 mx-32 grid grid-cols-5 font-bold rounded-b-2xl bg-gray-100' style={{ color: '#2F4156'}}>
+                <button 
+                        className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80 mx-10 mb-2 pb-3 rounded-b-2xl hover:bg-gray-400 hover:text-white'
+                        onClick={() => handleDifficultyChange('easy')}
+                    >Easy</button>
+                    <button 
+                        className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80 mx-10 mb-2 pb-3 rounded-b-2xl hover:bg-gray-400 hover:text-white'
+                        onClick={() => handleDifficultyChange('medium')}
+                    >Medium</button>
                     <Link
-                    to='/'
-                    className='py-2 text-center font-black text-xl rounded-b-2xl' style={{backgroundColor: '#567C8D', color: '#f0ebe9'}}
-
+                        to='/'
+                        className='py-2 text-center font-bold text-xl rounded-b-2xl' 
+                        style={{backgroundColor: '#567C8D', color: '#f0ebe9'}}
                         onMouseEnter={(e) => {
                             e.target.style.color = '#2F4156';
                             e.target.style.backgroundColor = '#d6d6d6';
@@ -160,10 +176,15 @@ const Game = () => {
                             e.target.style.color = '#f0ebe9';
                             e.target.style.backgroundColor = '#567C8D';
                         }}
-
                     >Typer Racer</Link>
-                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Hard</button>
-                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Master</button>
+                    <button 
+                        className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80 mx-10 mb-2 pb-3 rounded-b-2xl hover:bg-gray-400 hover:text-white'
+                        onClick={() => handleDifficultyChange('hard')}
+                    >Hard</button>
+                    <button 
+                        className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80 mx-10 mb-2 pb-3 rounded-b-2xl hover:bg-gray-400 hover:text-white'
+                        onClick={() => handleDifficultyChange('master')}
+                    >Master</button>
                 </div>
             </div>
             <div className="flex-1 relative overflow-hidden" style={{
@@ -228,18 +249,26 @@ const Game = () => {
                             <div id='test' className='py-5 px-6'>
                             <input type="text" className="opacity-0 absolute -z-99" onChange={handleChange} ref={inputRef} />
 
-                            {
-                                medium.split('').map((char,index)=> (
-                                    <span className={`text-2xl text-gray-500 font-semibold leading-loose ${index === charIndex? 'underline underline-offset-5 decoration-4 decoration-gray-500': ''} 
-                                     ${correctWrong[index] === ' correct ' ? 'text-green-700' : ''}
-                                        ${correctWrong[index] === ' wrong ' ? 'text-red-700 bg-red-100' : ''}
-                                    `} ref={(e)=> {
-                                        charRef.current[index] = e
-                                    }}>
-                                        {char}
-                                    </span>
-                                ))
-                            }
+                            
+            {
+                paragraphs[currentParagraph].split('').map((char,index)=> (
+                    <span 
+                        key={index}
+                        className={`text-2xl text-gray-500 font-semibold leading-loose ${
+                            index === charIndex ? 'underline underline-offset-5 decoration-4 decoration-gray-500': ''
+                        } ${
+                            correctWrong[index] === ' correct ' ? 'text-green-700' : ''
+                        } ${
+                            correctWrong[index] === ' wrong ' ? 'text-red-700 bg-red-100' : ''
+                        }`} 
+                        ref={(e)=> {
+                            charRef.current[index] = e
+                        }}
+                    >
+                        {char}
+                    </span>
+                ))
+            }
                             </div>
                         </div>
                     </div>
