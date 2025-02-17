@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://xuangiahannguyen.github.io/RacerTyper",
+  "homepage": "https://xuangiahannguyen.github.io/RacerTyper/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
