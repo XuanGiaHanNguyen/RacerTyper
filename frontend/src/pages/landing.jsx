@@ -14,7 +14,7 @@ const Landing = () => {
         <div className='w-full h-screen flex flex-row'>
             <div className='flex-1 flex items-center justify-center flex-col' style={{backgroundColor: '#567C8D'}}>
                 <h1 className='font-black text-6xl pb-10' style={{color: '#e0dcda'}}>
-                    Typer Car
+                    Typer Racer
                 </h1>
                 <div className='flex flex-col gap-5'>
                     <Link to='/game'

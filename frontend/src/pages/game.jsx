@@ -48,6 +48,26 @@ const Game = () => {
 
     return (
         <div className="flex flex-col h-screen">
+            <div className='w-full' style={{backgroundColor: '#C8D9E6'}}>
+                <div className=' pb-2 mx-32 grid grid-cols-5 font-bold rounded-b-2xl bg-white' style={{ color: '#2F4156'}}>
+                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Easy</button>
+                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Medium</button>
+                    <button className='py-2 font-black text-xl rounded-b-2xl' style={{backgroundColor: '#567C8D', color: '#f0ebe9'}}
+
+                        onMouseEnter={(e) => {
+                            e.target.style.color = '#2F4156';
+                            e.target.style.backgroundColor = '#d6d6d6';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.color = '#f0ebe9';
+                            e.target.style.backgroundColor = '#567C8D';
+                        }}
+
+                    >Typer Racer</button>
+                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Hard</button>
+                    <button className='pt-1 transition transform duration-300 ease-in-out hover:scale-110 hover:opacity-80'>Master</button>
+                </div>
+            </div>
             <div className="flex-1 relative overflow-hidden" style={{
                 backgroundColor: '#C8D9E6'
             }}>
@@ -80,22 +100,42 @@ const Game = () => {
                     style={getTransitionStyle(positions.bus)}
                 />
             </div>
-            <div className="flex-4 flex flex-col">
+            <div className="flex-2 flex flex-col">
                 <div className="flex-1" style={{backgroundColor: '#bbbdb9'}}>
                 </div>
                 <div className="flex-12" style={{backgroundColor: '#c9d4c1'}}>
-                    <div className='h-full'>
-                        <div className='h-full mt-10 mx-10 rounded-2xl px-10 pt-8' style={{backgroundColor: '#f0ebe9' }}>
-                            
+                    <div className=''>
+                        <div className=' mt-10 pb-8 mx-10 rounded-2xl px-10 pt-5' style={{backgroundColor: '#f0ebe9' }}>
+                            <div id='result'>
+                                <div className='grid grid-cols-5 font-bold text-xl text-gray-600 pb-3' style={{color: '#567C8D'}}>
+                                    <p className='pl-5 py-3'>Time Left: </p>
+                                    <p className='pl-5 py-3'>Mistake: </p>
+                                    <p className='pl-5 py-3'>WPM: </p>
+                                    <p className='pl-5 py-3'>CPM: </p>
+                                    <button className='py-3 mx-5 rounded-xl' style={{ color: '#f0ebe9', backgroundColor: '#567C8D' }}
+
+                                        onMouseEnter={(e) => {
+                                            e.target.style.color = '#d6d6d6';
+                                            e.target.style.backgroundColor = ' #2F4156';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.target.style.color = '#f0ebe9';
+                                            e.target.style.backgroundColor = '#567C8D';
+                                        }}
+
+                                    >Restart</button>
+                                </div>
+                            </div>
+                            <hr className='border-2 border-gray-400' />
+                            <div id='test' className='py-5 px-6'>
                             {
-                                easy.split('').map((char,index)=> (
-                                    <span className='text-3xl  font-bold'>
+                                medium.split('').map((char,index)=> (
+                                    <span className='text-2xl text-gray-500 font-semibold leading-loose'>
                                         {char}
                                     </span>
                                 ))
                             }
-
-
+                            </div>
                         </div>
                     </div>
                 </div>
