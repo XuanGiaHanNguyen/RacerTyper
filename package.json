@@ -2,5 +2,13 @@
   "dependencies": {
     "react-router-dom": "^7.1.5",
     "typewriter-effect": "^2.21.0"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  },
+  "homepage": "https://xuangiahannguyen.github.io/RacerTyper",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
