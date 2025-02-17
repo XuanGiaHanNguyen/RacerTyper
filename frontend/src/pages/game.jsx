@@ -8,6 +8,11 @@ import bus from '../assets/main/bus.png';
 
 
 const Game = () => {
+
+    const easy = "The sun is shining brightly, and the sky is a clear shade of blue. Birds fly high above, chirping as they glide through the air. Children laugh and play in the park, running across the soft green grass. A gentle breeze rustles the leaves, making the trees sway back and forth. It is a perfect day to relax, take a deep breath, and enjoy the beauty of nature all around."; 
+    const medium = "Technology has transformed the way we communicate, work, and interact with the world. With just a few clicks, we can send messages across continents, connect with loved ones, or access a wealth of information. Businesses rely on digital tools to improve efficiency and streamline operations. As innovation continues to shape our daily lives, adapting to new advancements has become essential. The rapid growth of technology challenges us to learn and evolve constantly.";
+    const hard = "In an era driven by rapid technological advancements, adaptability has become more crucial than ever. Artificial intelligence, automation, and data science are revolutionizing industries, altering the way we work and solve problems. As machines take over repetitive tasks, human creativity and critical thinking grow in importance. Continuous learning is the key to staying relevant in a fast-paced world. Embracing change not only fosters resilience but also opens the door to new opportunities and groundbreaking innovations.";
+
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [positions, setPositions] = useState({
         car1: windowWidth, // Start from right side
@@ -83,7 +88,6 @@ const Game = () => {
                         <div className='h-full mt-10 mx-10 rounded-2xl' style={{backgroundColor: '#f0ebe9' }}>
 
                         </div>
-
                     </div>
                 </div>
             </div>
