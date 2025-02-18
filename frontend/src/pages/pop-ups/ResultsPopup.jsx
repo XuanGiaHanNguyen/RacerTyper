@@ -49,7 +49,7 @@ const ResultsPopup = ({ mistake, WPM, CPM, onTryAgain, isVisible }) => {
           </button>
           
           <Link
-            to="/"
+            to="/RacerTyper"
             className="flex-1 py-3 rounded-xl font-bold text-center transition-colors duration-200"
             style={{ 
               backgroundColor: '#567C8D',
