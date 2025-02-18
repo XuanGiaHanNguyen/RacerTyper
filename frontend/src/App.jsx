@@ -14,11 +14,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing/>}>
-          <Route path="/instruction" element={<Instruction/>}/>
-          <Route path="/motivation" element={<Motivation/>}/>
+        <Route path="/racertyper" element={<Landing/>}>
+          <Route path="/racertyper/instruction" element={<Instruction/>}/>
+          <Route path="/racertyper/motivation" element={<Motivation/>}/>
         </Route>
-        <Route path="/game" element={<Game/>}/>
+        <Route path="/racertyper/game" element={<Game/>}/>
       </Routes>
    </BrowserRouter>
   )
