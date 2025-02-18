@@ -26,7 +26,7 @@ const Landing = () => {
                     />
                     </h1>
                 <div className='flex flex-col gap-5'>
-                    <Link to='/game'
+                    <Link to='/RacerTyper/game'
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center  transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
                         onMouseEnter={(e) => {
@@ -40,7 +40,7 @@ const Landing = () => {
                     >
                         Start Now
                     </Link>
-                    <Link to='/instruction'
+                    <Link to='/RacerTyper/instruction'
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
                         onMouseEnter={(e) => {
@@ -55,7 +55,7 @@ const Landing = () => {
                         Instruction
                     </Link>
 
-                    <Link to='/motivation'
+                    <Link to='/RacerTyper/motivation'
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center  transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
                         onMouseEnter={(e) => {

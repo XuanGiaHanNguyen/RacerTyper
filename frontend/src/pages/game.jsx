@@ -171,7 +171,7 @@ const Game = () => {
                         onClick={() => handleDifficultyChange('medium')}
                     >Medium</button>
                     <Link
-                        to='/'
+                        to='/RacerTyper'
                         className='py-2 text-center font-bold text-xl rounded-b-2xl' 
                         style={{backgroundColor: '#567C8D', color: '#f0ebe9'}}
                         onMouseEnter={(e) => {

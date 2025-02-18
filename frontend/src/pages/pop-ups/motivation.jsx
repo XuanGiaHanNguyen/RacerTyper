@@ -11,7 +11,7 @@ const Motivation = () => {
         <div className="fixed inset-0 bg-opacity-50 z-50 flex items-center justify-center p-4">
             <div className="rounded-xl shadow-lg relative w-[85%] h-[60vh] overflow-auto" style={{backgroundColor: '#F5EFEB' }}>
                 <button
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/RacerTyper')}
                     className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 text-xl transition-colors"
                 >
                     ×
@@ -23,8 +23,8 @@ const Motivation = () => {
                         strings: ["Motivation."],
                         autoStart: true,
                         loop: true,
-                        delay: 200,
-                        deleteSpeed: 100,
+                        delay: 100,
+                        deleteSpeed: 50,
                         }}
                     />
                     </h2>
