@@ -1,7 +1,6 @@
 import '../index.css';
 import React, { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
+import { useNavigate, Link, Outlet } from "react-router-dom"
 import Typewriter from "typewriter-effect";
 
 import bus from '../assets/main/bus.png';
@@ -10,6 +9,14 @@ import car2 from '../assets/main/car2.png';
 import bg from '../assets/main/bg.png';
 
 const Landing = () => {
+    
+    const navigate = useNavigate(); // Move this to the top level of the component
+
+    const handleStartGame = () => {
+        navigate('/RacerTyper/loading'); // Just use navigate directly
+    };
+
+
     return (
         <>
         <div className='w-full h-screen flex flex-row'>
@@ -26,7 +33,7 @@ const Landing = () => {
                     />
                     </h1>
                 <div className='flex flex-col gap-5'>
-                    <Link to='/RacerTyper/game'
+                    <button onClick={handleStartGame}
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center  transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
                         onMouseEnter={(e) => {
@@ -39,7 +46,7 @@ const Landing = () => {
                         }}
                     >
                         Start Now
-                    </Link>
+                    </button>
                     <Link to='/RacerTyper/instruction'
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
