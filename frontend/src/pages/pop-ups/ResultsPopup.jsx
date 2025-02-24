@@ -6,7 +6,7 @@ const ResultsPopup = ({ mistake, WPM, CPM, onTryAgain, isVisible }) => {
 
   return (
     <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="rounded-2xl p-8 max-w-md w-full mx-4 shadow-xl" style={{backgroundColor: "#b5b5b5"}}>
+      <div className="rounded-2xl p-8 max-w-md w-full mx-4 shadow-xl" style={{backgroundColor: "#c4c4c4"}}>
         <h2 className="text-4xl font-bold mb-6 text-center" style={{ color: '#f5efeb' }}>
           Typing Results
         </h2>
