@@ -10,6 +10,7 @@ import LoadingScreen from "./pages/loading/LoadingScreen";
 import Chatbot from "./pages/chatbot";
 
 
+
 // name of the function must be capitalized
 
 function App() {
