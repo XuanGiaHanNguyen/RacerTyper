@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChatBotIcon, SendIcon } from '../assets/icon';
+import Typewriter from "typewriter-effect";
 
 const Chatbot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ const Chatbot = () => {
     return (
         <div className="fixed bottom-6 right-6 z-50">
             {isOpen && (
-                <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg w-72 border border-gray-200 overflow-hidden">
+                <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-lg w-72  overflow-hidden">
                     <div className="text-white p-3 flex justify-between items-center" style={{backgroundColor: "#567c8d"}}>
                         <h3 className="font-medium">Racer Support</h3>
                         <button 
@@ -24,7 +25,22 @@ const Chatbot = () => {
                     <div className="h-64 p-3 overflow-y-auto bg-gray-50">
                         {/* Chat messages would go here */}
                         <div className="mb-2 text-gray-600">
-                            Hello! How can I help you today?
+                        <Typewriter
+                onInit={(typewriter) => {
+                  typewriter
+                    .typeString("Hello! How can I help you today?")
+                    .callFunction(() => {
+                      // Stop blinking cursor after typing is complete
+                      document.querySelector('.Typewriter__cursor').style.display = 'none';
+                    })
+                    .start();
+                }}
+                options={{
+                  delay: 50,
+                  cursor: "|"
+                }}
+              />
+                            
                         </div>
                     </div>
                     <div className="p-3 border-t border-gray-200">

@@ -21,18 +21,21 @@ const Landing = () => {
         <>
         <div className='w-full h-screen flex flex-row'>
             <div className='flex-1 flex items-center justify-center flex-col' style={{backgroundColor: '#567C8D'}}>
-            <h1 className="font-black text-7xl pb-10 text-[#e0dcda]">
-                    <Typewriter
-                        options={{
-                        strings: ["Typer Racer."],
-                        autoStart: true,
-                        loop: true,
-                        delay: 200,
-                        deleteSpeed: 100,
-                        }}
-                    />
+                {/* Fixed height container for the typewriter to prevent layout shifts */}
+                <div className="h-28 flex items-center justify-center">
+                    <h1 className="font-black text-7xl text-[#e0dcda]">
+                        <Typewriter
+                            options={{
+                            strings: ["Typer Racer."],
+                            autoStart: true,
+                            loop: true,
+                            delay: 200,
+                            deleteSpeed: 100,
+                            }}
+                        />
                     </h1>
-                <div className='flex flex-col gap-5'>
+                </div>
+                <div className='flex flex-col gap-5 pt-10'>
                     <button onClick={handleStartGame}
                         className='px-36 py-3 text-2xl font-bold rounded-lg flex justify-center items-center  transition-colors duration-500'
                         style={{ color: '#567C8D', backgroundColor: '#F5EFEB' }}
