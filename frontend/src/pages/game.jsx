@@ -20,48 +20,141 @@ const Game = () => {
 
     const [charIndex, setCharIndex] = useState(0);
     const [isTyping, setIsTyping] = useState(false); 
+    const [timerStarted, setTimerStarted] = useState(false);
 
     const [currentParagraph, setCurrentParagraph] = useState('medium'); 
 
     const inputRef = useRef(null);
     const charRef = useRef([]);
-    const [correctWrong, setCorrectWrong] = useState([])
+    const [correctWrong, setCorrectWrong] = useState([]);
+    
+    // Add a typed text state to keep track of what the user has typed
+    const [typedText, setTypedText] = useState('');
+    
+    // Add a timer interval ref to keep track of the timer
+    const timerIntervalRef = useRef(null);
 
     const handleChange = (e) => {
         if (showResults) return;
-    
-        const typedChar = e.target.value.slice(-1);
-        e.target.value = '';
-    
+        
+        // Get the current input value
+        const currentInput = e.target.value;
+        
+        // Start the timer on first keystroke if not already started
+        if (!timerStarted && timeLeft === maxTime) {
+            setTimerStarted(true);
+            setIsTyping(true);
+            
+            // Start the timer immediately and store the interval ID
+            startTimer();
+        }
+        
+        // If the input is shorter than what was previously typed,
+        // this means the user pressed backspace
+        if (currentInput.length < typedText.length) {
+            // Only allow backspace if we're not at the beginning
+            if (charIndex > 0) {
+                // Update the character index
+                setCharIndex(prev => prev - 1);
+                
+                // Clear the status of the deleted character
+                const newCorrectWrong = [...correctWrong];
+                newCorrectWrong[charIndex - 1] = '';
+                setCorrectWrong(newCorrectWrong);
+                
+                // If the deleted character was wrong, decrease the mistake count
+                if (correctWrong[charIndex - 1] === ' wrong ') {
+                    setMistake(prev => prev - 1);
+                }
+            }
+            
+            // Update the typed text
+            setTypedText(currentInput);
+            return;
+        }
+        
+        // Get the newest typed character
+        const typedChar = currentInput.slice(-1);
+        
         const characters = charRef.current;
         if (!characters || charIndex >= characters.length || timeLeft <= 0) {
             return;
         }
-    
+        
         let currentChar = characters[charIndex];
         if (!currentChar) return;
-    
-        // Only set isTyping to true on the first character
-        if (!isTyping && timeLeft === maxTime) {
-            setIsTyping(true);
-        }
-    
-        // check whether what we typed in is correct or not
+        
+        // Check whether what we typed in is correct or not
+        const newCorrectWrong = [...correctWrong];
         if (typedChar === currentChar.textContent) {
-            setCharIndex(prev => prev + 1);
-            correctWrong[charIndex] = ' correct ';
+            newCorrectWrong[charIndex] = ' correct ';
         } else {
-            setCharIndex(prev => prev + 1);
             setMistake(prev => prev + 1);
-            correctWrong[charIndex] = ' wrong ';
+            newCorrectWrong[charIndex] = ' wrong ';
         }
-    
-        // check if finished
+        setCorrectWrong(newCorrectWrong);
+        
+        // Increase the character index
+        setCharIndex(prev => prev + 1);
+        
+        // Update the typed text
+        setTypedText(currentInput);
+        
+        // Check if finished
         if (charIndex === characters.length - 1) {
             setIsTyping(false);
             setShowResults(true);
+            stopTimer();
         }
     }
+
+    // Function to start the timer
+    const startTimer = () => {
+        // Clear any existing timer first
+        if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+        }
+        
+        // Start a new timer
+        timerIntervalRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+                // If time is up, show results and stop timer
+                if (prev <= 1) {
+                    stopTimer();
+                    setIsTyping(false);
+                    setShowResults(true);
+                    return 0;
+                }
+                return prev - 1;
+            });
+            
+            // Update stats every second
+            updateStats();
+        }, 1000);
+    };
+    
+    // Function to stop the timer
+    const stopTimer = () => {
+        if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+            timerIntervalRef.current = null;
+        }
+    };
+    
+    // Function to update stats
+    const updateStats = () => {
+        // Calculate stats
+        const correctChars = charIndex - mistake;
+        const totalTime = maxTime - timeLeft + 1; // Add 1 to avoid division by zero
+
+        let cpm = correctChars * (60 / totalTime);
+        cpm = cpm < 0 || !cpm || cpm === Infinity ? 0 : cpm;
+        setCPM(parseInt(cpm, 10));
+
+        let wpm = Math.round((correctChars / 5 / totalTime) * 60);
+        wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
+        setWPM(parseInt(wpm, 10));
+    };
 
     const paragraphs = {
         easy: "The sun is shining brightly, and the sky is a clear shade of blue. Birds fly high above, chirping as they glide through the air. Children laugh and play in the park, running across the soft green grass. A gentle breeze rustles the leaves, making the trees sway back and forth. It is a perfect day to relax, take a deep breath, and enjoy the beauty of nature all around.",
@@ -85,7 +178,7 @@ const Game = () => {
 
     useEffect(() => {
         inputRef.current.focus();
-        setCorrectWrong(Array(charRef.current.length).fill(''))
+        setCorrectWrong(Array(charRef.current.length).fill(''));
     }, [currentParagraph]
     );
 
@@ -109,35 +202,21 @@ const Game = () => {
         return () => clearInterval(animationFrame);
     }, [windowWidth]);
 
+    // Clean up timer on component unmount
     useEffect(() => {
-        let interval;
-        // Start timer when typing begins and keep it running
-        if (isTyping && timeLeft > 0) {
-            interval = setInterval(() => {
-                setTimeLeft(prev => prev - 1);
-                
-                let correctChars = charIndex - mistake;
-                let totalTime = maxTime - timeLeft;
-    
-                let CPM = correctChars * (60 / totalTime);
-                CPM = CPM < 0 || !CPM || CPM === Infinity ? 0 : CPM;
-                setCPM(parseInt(CPM, 10));
-    
-                let wpm = Math.round((correctChars / 5 / totalTime) * 60);
-                wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
-                setWPM(parseInt(wpm, 10));
-            }, 1000);
-        } else if (timeLeft === 0) {
-            clearInterval(interval);
-            setIsTyping(false);
-            setShowResults(true);
-        }
-    
-        return () => clearInterval(interval);
-    }, [isTyping, timeLeft]); // Remove charIndex and mistake from dependencies
+        return () => {
+            if (timerIntervalRef.current) {
+                clearInterval(timerIntervalRef.current);
+            }
+        };
+    }, []);
 
     const ResetGame = () => {
+        // Stop any running timer
+        stopTimer();
+        
         setIsTyping(false);
+        setTimerStarted(false);
         setTimeLeft(60);
         setCharIndex(0);
         setMistake(0);
@@ -145,8 +224,9 @@ const Game = () => {
         setWPM(0);
         setShowResults(false);
         setCorrectWrong(Array(charRef.current.length).fill(''));
+        setTypedText('');
         if (inputRef.current) {
-            inputRef.current.value = ''; // Clear the input
+            inputRef.current.value = '';
             inputRef.current.focus();
         }
     }
@@ -156,7 +236,7 @@ const Game = () => {
           transform: `translateX(${position}px)`,
           transition: 'transform 0.016s linear'
         };
-      };
+    };
 
     return (
         <div className="flex flex-col h-screen">
@@ -253,7 +333,13 @@ const Game = () => {
                             </div>
                             <hr className='border-2 border-gray-400' />
                             <div id='test' className='py-5 px-6'>
-                            <input type="text" className="opacity-0 absolute -z-99" onChange={handleChange} ref={inputRef} />
+                            <input 
+                                type="text" 
+                                className="opacity-0 absolute -z-99" 
+                                onChange={handleChange} 
+                                ref={inputRef}
+                                value={typedText} // Bind the input value to our typedText state
+                            />
 
                             
             {
