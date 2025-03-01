@@ -33,6 +33,12 @@ const Game = () => {
     
     // Add a timer interval ref to keep track of the timer
     const timerIntervalRef = useRef(null);
+    
+    // Add a ref to track total correct characters
+    const correctCharsRef = useRef(0);
+    
+    // Add a ref to track start time
+    const startTimeRef = useRef(null);
 
     const handleChange = (e) => {
         if (showResults) return;
@@ -44,6 +50,8 @@ const Game = () => {
         if (!timerStarted && timeLeft === maxTime) {
             setTimerStarted(true);
             setIsTyping(true);
+            correctCharsRef.current = 0;
+            startTimeRef.current = Date.now();
             
             // Start the timer immediately and store the interval ID
             startTimer();
@@ -56,6 +64,11 @@ const Game = () => {
             if (charIndex > 0) {
                 // Update the character index
                 setCharIndex(prev => prev - 1);
+                
+                // If the deleted character was correct, decrease correct count
+                if (correctWrong[charIndex - 1] === ' correct ') {
+                    correctCharsRef.current -= 1;
+                }
                 
                 // Clear the status of the deleted character
                 const newCorrectWrong = [...correctWrong];
@@ -88,6 +101,7 @@ const Game = () => {
         const newCorrectWrong = [...correctWrong];
         if (typedChar === currentChar.textContent) {
             newCorrectWrong[charIndex] = ' correct ';
+            correctCharsRef.current += 1; // Increment correct character count
         } else {
             setMistake(prev => prev + 1);
             newCorrectWrong[charIndex] = ' wrong ';
@@ -100,9 +114,13 @@ const Game = () => {
         // Update the typed text
         setTypedText(currentInput);
         
+        // Update WPM and CPM immediately after each character
+        updateStats();
+        
         // Check if finished
         if (charIndex === characters.length - 1) {
             setIsTyping(false);
+            updateStats(); // Force a final update of stats
             setShowResults(true);
             stopTimer();
         }
@@ -122,6 +140,7 @@ const Game = () => {
                 if (prev <= 1) {
                     stopTimer();
                     setIsTyping(false);
+                    updateStats(); // Force a final update of stats
                     setShowResults(true);
                     return 0;
                 }
@@ -141,19 +160,29 @@ const Game = () => {
         }
     };
     
-    // Function to update stats
+    // Corrected function to update stats
     const updateStats = () => {
-        // Calculate stats
-        const correctChars = charIndex - mistake;
-        const totalTime = maxTime - timeLeft + 1; // Add 1 to avoid division by zero
-
-        let cpm = correctChars * (60 / totalTime);
-        cpm = cpm < 0 || !cpm || cpm === Infinity ? 0 : cpm;
-        setCPM(parseInt(cpm, 10));
-
-        let wpm = Math.round((correctChars / 5 / totalTime) * 60);
-        wpm = wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
-        setWPM(parseInt(wpm, 10));
+        if (!startTimeRef.current) return;
+        
+        // Calculate time elapsed in minutes
+        const elapsedTime = (Date.now() - startTimeRef.current) / 1000; // seconds
+        const elapsedMinutes = elapsedTime / 60; // convert to minutes
+        
+        // Ensure we don't divide by zero (use at least 1 second)
+        const timeForCalculation = Math.max(elapsedMinutes, 1/60);
+        
+        // Get correct characters count
+        const correctChars = correctCharsRef.current;
+        
+        // Calculate CPM (Characters Per Minute)
+        const cpm = Math.round(correctChars / timeForCalculation);
+        
+        // Calculate WPM (Words Per Minute) - standard is 5 characters = 1 word
+        const wpm = Math.round(correctChars / 5 / timeForCalculation);
+        
+        // Update state with valid numbers only
+        setCPM(isFinite(cpm) && cpm >= 0 ? cpm : 0);
+        setWPM(isFinite(wpm) && wpm >= 0 ? wpm : 0);
     };
 
     const paragraphs = {
@@ -178,7 +207,9 @@ const Game = () => {
 
     useEffect(() => {
         inputRef.current.focus();
-        setCorrectWrong(Array(charRef.current.length).fill(''));
+        const paragraphLength = paragraphs[currentParagraph].length;
+        setCorrectWrong(Array(paragraphLength).fill(''));
+        charRef.current = charRef.current.slice(0, paragraphLength);
     }, [currentParagraph]
     );
 
@@ -223,7 +254,15 @@ const Game = () => {
         setCPM(0);
         setWPM(0);
         setShowResults(false);
-        setCorrectWrong(Array(charRef.current.length).fill(''));
+        
+        // Reset our refs
+        correctCharsRef.current = 0;
+        startTimeRef.current = null;
+        
+        // Reset the paragraph state
+        const paragraphLength = paragraphs[currentParagraph].length;
+        setCorrectWrong(Array(paragraphLength).fill(''));
+        
         setTypedText('');
         if (inputRef.current) {
             inputRef.current.value = '';
